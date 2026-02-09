@@ -51,7 +51,8 @@ const UserUrl = () => {
   return (
     <div className="bg-white rounded-lg mt-5 shadow-md overflow-hidden">
       
-      <div className="overflow-x-auto h-56">
+      {/* We use 200px instead of 300px to give the table more vertical room */}
+    <div className="overflow-x-auto flex-grow h-[calc(80vh-200px)] custom-scrollbar">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -80,12 +81,12 @@ const UserUrl = () => {
                 <td className="px-6 py-4">
                   <div className="text-sm">
                     <a 
-                      href={`http://localhost:3000/${url.short_url}`} 
+                      href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/${url.short_url}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-900 hover:underline"
                     >
-                      {`localhost:3000/${url.short_url}`}
+                     {url.short_url}
                     </a>
                   </div>
                 </td>
@@ -98,7 +99,7 @@ const UserUrl = () => {
                 </td>
                 <td className="px-6 py-4 text-sm font-medium">
                   <button
-                    onClick={() => handleCopy(`http://localhost:3000/${url.short_url}`, url._id)}
+                    onClick={() => handleCopy(`${import.meta.env.VITE_API_BASE_URL}/${url.short_url}`, url._id)}
                     className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm ${
                       copiedId === url._id
                         ? 'bg-green-600 text-white hover:bg-green-700'
