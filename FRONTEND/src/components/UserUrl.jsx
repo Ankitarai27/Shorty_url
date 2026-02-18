@@ -132,4 +132,4 @@ const UserUrl = () => {
   )
 }
 
-export default UserUrl
+export default UserUrl;
