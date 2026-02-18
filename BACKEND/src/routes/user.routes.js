@@ -6,4 +6,4 @@ const router = express.Router()
 
 router.post("/urls",authMiddleware, getAllUserUrls)
 
-export default router
+export default router;

@@ -24,8 +24,12 @@ app.use(rateLimit({
  max: 100
 }));
 app.use(cors({
-    origin: true,
-    credentials: true
+  origin: "https://shorty-url-gray.vercel.app",
+  credentials: true
+}));
+app.options("*", cors({
+  origin: "https://shorty-url-gray.vercel.app",
+  credentials: true
 }));
 
 

@@ -9,4 +9,4 @@ router.post("/login", login_user)
 router.post("/logout", logout_user)
 router.get("/me", authMiddleware,get_current_user)
 
-export default router
+export default router;
