@@ -15,9 +15,10 @@ dotenv.config() // Standard config call
 
 const app = express();
 app.use(cors({
-    origin: (origin, callback) => callback(null, true), // Allows any origin to connect
+    origin: true,
     credentials: true
 }));
+
 
 
 app.use(express.json())
