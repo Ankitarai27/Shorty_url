@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import connectDB from "./src/config/monogo.config.js"; // Make sure spelling is correct
+import connectDB from "./src/config/monogo.config.js";
 import short_url from "./src/routes/short_url.route.js";
 import user_routes from "./src/routes/user.routes.js";
 import auth_routes from "./src/routes/auth.routes.js";
@@ -16,44 +16,35 @@ dotenv.config();
 
 const app = express();
 
-// Rate limiting
-app.use(
-  rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-  })
-);
+app.use(helmet());
 
-// CORS
-const FRONTEND_URL = "https://shorty-url-gray.vercel.app"; // Vercel frontend
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-  })
-);
-app.options("*", cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+}));
 
-// Middlewares
+app.use(cors({
+  origin: "https://shorty-url-gray.vercel.app",
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(attachUser);
 
-// Routes
 app.use("/api/user", user_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/create", short_url);
+
 app.get("/:id", redirectFromShortUrl);
 
-// Error handler
 app.use(errorHandler);
-app.use(helmet());
 
-// Connect DB and start server
 const PORT = process.env.PORT || 5000;
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+
+connectDB();
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
