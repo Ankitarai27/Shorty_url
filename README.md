@@ -87,9 +87,22 @@ FRONTEND/
    ```Bash
    cd BACKEND
    npm install
-   # 💡 Don't forget to create your .env and add MONGODB_URI & PORT
+   # 💡 Don't forget to create your `.env` (see example below)
    npm start
    ```
+
+   Example backend `.env` values:
+   ```env
+   PORT=5000
+   MONGO_URI=<your_mongodb_connection_string>
+   # MONGODB_URI is also supported as a fallback
+   JWT_SECRET=<your_jwt_secret>
+   APP_URL=http://localhost:5000/
+   CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
+   ```
+
+   > For production, set `APP_URL` to your backend public URL (for example your Render URL).
+   > `APP_URL` can be set with or without trailing slash (handled safely).
 3️⃣ **Setup Frontend:**
 
    ```Bash
@@ -109,3 +122,19 @@ FRONTEND/
 - Open a Pull Request 🚀
   
 Developed with ❤️ by Ankita Rai
+
+## 🔍 Custom Domain 404 Troubleshooting
+
+If `https://your-domain.com/<shortCode>` returns **404**, your request is usually not reaching this backend service.
+
+1. Open `https://your-domain.com/api/health`
+   - Expected response: JSON like `{ "status": "ok", ... }` from this app.
+   - If you get 404/parked page/other site, DNS or domain mapping is incorrect.
+2. Ensure your custom domain is attached to your backend service (Render custom domain settings).
+3. Ensure DNS points to the backend target provided by Render (remove old parked/for-sale records).
+4. Ensure SSL is active for the custom domain.
+5. Verify env value:
+   - Backend: `APP_URL=https://your-render-backend-url`
+
+> Domain names are case-insensitive, so `ANKITA.com` and `ankita.com` are treated the same by DNS.
+> But if the domain is registered/parked by someone else or mapped to another host, it will not redirect through your shortener service.
