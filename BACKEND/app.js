@@ -51,6 +51,14 @@ app.use("/api/user", user_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/create", short_url);
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "shorty-backend",
+    host: req.hostname,
+  });
+});
+
 app.get("/:id", redirectFromShortUrl);
 
 app.use(errorHandler);

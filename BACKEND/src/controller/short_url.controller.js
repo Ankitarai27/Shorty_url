@@ -3,11 +3,9 @@ import { createShortUrlWithoutUser, createShortUrlWithUser } from "../services/s
 import wrapAsync from "../utils/tryCatchWrapper.js"
 
 const buildPublicShortUrl = (shortUrl) => {
-    const publicBaseUrl = (process.env.PUBLIC_BASE_URL || process.env.APP_URL || "")
-        .trim()
-        .replace(/\/+$/, "")
+    const appUrl = (process.env.APP_URL || "").trim().replace(/\/+$/, "")
+    return appUrl ? `${appUrl}/${shortUrl}` : `/${shortUrl}`
 
-    return publicBaseUrl ? `${publicBaseUrl}/${shortUrl}` : `/${shortUrl}`
 }
 
 export const createShortUrl = wrapAsync(async (req,res)=>{

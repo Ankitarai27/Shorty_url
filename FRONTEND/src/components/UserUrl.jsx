@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllUserUrls } from '../api/user.api'
 
-const publicBaseUrl = (import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/+$/, "")
+const publicBaseUrl = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/+$/, "")
+
 
 const UserUrl = () => {
   const { data: urls, isLoading, isError, error } = useQuery({

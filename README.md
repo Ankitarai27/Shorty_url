@@ -98,16 +98,11 @@ FRONTEND/
    # MONGODB_URI is also supported as a fallback
    JWT_SECRET=<your_jwt_secret>
    APP_URL=http://localhost:5000/
-   # Optional: use a separate public short-link domain shown to users
-   PUBLIC_BASE_URL=https://sty.com
    CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
    ```
 
-   > For production, set `PUBLIC_BASE_URL` to the domain you want users to see in generated links (for example `https://sty.com`).
-   > Keep `APP_URL` as your backend server URL (Render, etc.) used by your app/API deployment.
-   > If `PUBLIC_BASE_URL` is not set, link generation falls back to `APP_URL`.
-   > `PUBLIC_BASE_URL` and `APP_URL` can be set with or without trailing slash (both are handled safely).
-   > In frontend, set `VITE_PUBLIC_BASE_URL` to the same value as backend `PUBLIC_BASE_URL` so History/Copy buttons use your short domain.
+   > For production, set `APP_URL` to your backend public URL (for example your Render URL).
+   > `APP_URL` can be set with or without trailing slash (handled safely).
 
 3️⃣ **Setup Frontend:**
 
@@ -130,3 +125,19 @@ FRONTEND/
 - Open a Pull Request 🚀
   
 Developed with ❤️ by Ankita Rai
+
+## 🔍 Custom Domain 404 Troubleshooting
+
+If `https://your-domain.com/<shortCode>` returns **404**, your request is usually not reaching this backend service.
+
+1. Open `https://your-domain.com/api/health`
+   - Expected response: JSON like `{ "status": "ok", ... }` from this app.
+   - If you get 404/parked page/other site, DNS or domain mapping is incorrect.
+2. Ensure your custom domain is attached to your backend service (Render custom domain settings).
+3. Ensure DNS points to the backend target provided by Render (remove old parked/for-sale records).
+4. Ensure SSL is active for the custom domain.
+5. Verify env value:
+   - Backend: `APP_URL=https://your-render-backend-url`
+
+> Domain names are case-insensitive, so `ANKITA.com` and `ankita.com` are treated the same by DNS.
+> But if the domain is registered/parked by someone else or mapped to another host, it will not redirect through your shortener service.
