@@ -57,6 +57,7 @@
    - [Components](#components)
    - [Pages](#pages)
    - [Frontend Utilities](#frontend-utilities)
+
 8. [🧠 Function-by-Function Reference](#-function-by-function-reference)
 9. [🔐 Environment Variables](#-environment-variables)
 10. [📡 API Endpoints](#-api-endpoints)
@@ -80,6 +81,7 @@ It balances **developer experience**, **application security**, and **production
 - ✅ **Deployment friendly** — environment-driven setup with health checks.
 
 ---
+
 
 ## ✨ Key Highlights
 
@@ -152,6 +154,7 @@ flowchart TD
 
 ```text
 UI Action → API Route → Controller → Service → DAO → MongoDB → Response
+
 ```
 
 ---
@@ -483,6 +486,7 @@ CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
 
 Optional (typically provided by Render):
 
+
 ```env
 RENDER_EXTERNAL_URL=<render_generated_url>
 ```
@@ -556,6 +560,7 @@ flowchart LR
     U -->|Short URL visit| R
 ```
 
+=======
 ### Render (Backend)
 1. Deploy `BACKEND` as a web service.
 2. Configure backend environment variables.
