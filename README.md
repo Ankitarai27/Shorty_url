@@ -101,9 +101,7 @@ FRONTEND/
    CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
    ```
 
-   > For production, set `APP_URL` to the public domain you want users to see (for example your custom short domain).
-   > If `APP_URL` points to `*.onrender.com`, generated links will also use that domain.
-   > `APP_URL` can be set with or without a trailing slash (both are handled safely now).
+
 3️⃣ **Setup Frontend:**
 
    ```Bash
