@@ -3,7 +3,6 @@ import { createShortUrlWithoutUser, createShortUrlWithUser } from "../services/s
 import wrapAsync from "../utils/tryCatchWrapper.js"
 
 const buildPublicShortUrl = (shortUrl) => {
-
     const baseUrl = (process.env.RENDER_EXTERNAL_URL || process.env.APP_URL || "")
         .trim()
         .replace(/\/+$/, "")
