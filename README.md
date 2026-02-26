@@ -57,6 +57,8 @@
    - [Components](#components)
    - [Pages](#pages)
    - [Frontend Utilities](#frontend-utilities)
+
+
 8. [🧠 Function-by-Function Reference](#-function-by-function-reference)
 9. [🔐 Environment Variables](#-environment-variables)
 10. [📡 API Endpoints](#-api-endpoints)
@@ -79,7 +81,6 @@ It balances **developer experience**, **application security**, and **production
 - ✅ **Cleanly organized codebase** — follows `Controller → Service → DAO` architecture.
 - ✅ **Deployment friendly** — environment-driven setup with health checks.
 
----
 
 ## ✨ Key Highlights
 
@@ -152,6 +153,7 @@ flowchart TD
 
 ```text
 UI Action → API Route → Controller → Service → DAO → MongoDB → Response
+
 ```
 
 ---
@@ -241,6 +243,7 @@ Shorty_url/
 
 <div align="center">
 
+
 ### 🛠️ Backend at a Glance
 
 <table>
@@ -255,13 +258,13 @@ Shorty_url/
 
 ### Backend Layer Diagram
 
+
 ```mermaid
 flowchart LR
     R[Routes] --> C[Controllers]
     C --> S[Services]
     S --> D[DAO]
     D --> M[(MongoDB)]
-
     U[Utils] -. shared helpers .-> C
     U -. shared helpers .-> S
     MW[Middleware] -. guards/attach user .-> R
@@ -296,6 +299,7 @@ Responsibilities:
 | 🧰 Utilities | `src/utils/helper.js`, `src/utils/attachUser.js`, `src/utils/errorHandler.js`, `src/utils/tryCatchWrapper.js` | Shared helpers for JWT, user attach flow, error handling and async safety. |
 | 🛡️ Middleware | `src/middleware/auth.middleware.js` | Protects private endpoints and enforces login checks. |
 
+
 ### Routes Layer
 
 | File | Endpoints |
@@ -303,6 +307,7 @@ Responsibilities:
 | `src/routes/auth.routes.js` | `/register`, `/login`, `/logout`, `/me` |
 | `src/routes/short_url.route.js` | `/` (mounted at `/api/create`) |
 | `src/routes/user.routes.js` | `/urls` (mounted at `/api/user`) |
+
 
 ---
 
@@ -362,6 +367,7 @@ flowchart LR
 | `LoginForm` / `RegisterForm` | User authentication forms |
 | `UrlForm` | Long URL + optional custom slug input + copy short URL |
 | `UserUrl` | Authenticated user history and click metrics |
+
 
 ---
 
@@ -543,6 +549,9 @@ flowchart LR
 1. Deploy `BACKEND` as a web service.
 2. Configure backend environment variables.
 3. Verify `https://<your-backend-domain>/api/health` returns `status: ok`.
+
+=======
+
 
 ### Vercel (Frontend)
 1. Deploy `FRONTEND` as a Vercel project.
