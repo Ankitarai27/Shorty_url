@@ -107,6 +107,8 @@ FRONTEND/
    > Keep `APP_URL` as your backend server URL (Render, etc.) used by your app/API deployment.
    > If `PUBLIC_BASE_URL` is not set, link generation falls back to `APP_URL`.
    > `PUBLIC_BASE_URL` and `APP_URL` can be set with or without trailing slash (both are handled safely).
+
+ 
 3️⃣ **Setup Frontend:**
 
    ```Bash
