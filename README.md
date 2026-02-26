@@ -87,14 +87,34 @@ FRONTEND/
    ```Bash
    cd BACKEND
    npm install
-   # 💡 Don't forget to create your .env and add MONGODB_URI & PORT
+   # 💡 Don't forget to create your `.env` (see example below)
    npm start
    ```
+
+   Example backend `.env` values:
+   ```env
+   PORT=5000
+   MONGO_URI=<your_mongodb_connection_string>
+   # MONGODB_URI is also supported as a fallback
+   JWT_SECRET=<your_jwt_secret>
+   APP_URL=http://localhost:5000/
+   # Optional: use a separate public short-link domain shown to users
+   PUBLIC_BASE_URL=https://sty.com
+   CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
+   ```
+
+   > For production, set `PUBLIC_BASE_URL` to the domain you want users to see in generated links (for example `https://sty.com`).
+   > Keep `APP_URL` as your backend server URL (Render, etc.) used by your app/API deployment.
+   > If `PUBLIC_BASE_URL` is not set, link generation falls back to `APP_URL`.
+   > `PUBLIC_BASE_URL` and `APP_URL` can be set with or without trailing slash (both are handled safely).
+   > In frontend, set `VITE_PUBLIC_BASE_URL` to the same value as backend `PUBLIC_BASE_URL` so History/Copy buttons use your short domain.
 3️⃣ **Setup Frontend:**
 
    ```Bash
    cd ../FRONTEND
    npm install
+   # Optional: for history/copy links in UI
+   # VITE_PUBLIC_BASE_URL=https://sty.com
    npm run dev
    ```
 ## 🤝 Contributing
