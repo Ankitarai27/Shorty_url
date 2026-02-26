@@ -395,22 +395,6 @@ flowchart LR
 | 🧭 Route Guard Utility | `src/utils/helper.js` | `checkAuth({ context })` | Performs auth check through React Query and keeps Redux auth state synced. |
 | 🧩 Component handlers | `src/components/UrlForm.jsx`, `src/components/UserUrl.jsx`, `src/components/LoginForm.jsx`, `src/components/RegisterForm.jsx` | `handleSubmit`, `handleCopy`, form submit handlers | Handles user interactions like URL creation, clipboard copy, and auth form submit. |
 
-### 🎨 Suggested Project Structure Design Ideas
-
-If you want a cleaner architecture for scaling, here are 3 practical layout options:
-
-1. **Feature-first (recommended for this project)**
-   - Group by domain (`auth`, `url`, `history`) instead of technical type.
-   - Easier for teams because each feature contains API, UI, hooks, and tests in one place.
-
-2. **Layered strict separation**
-   - Keep separate folders for `controllers`, `services`, `dao`, `models` (backend) and `components`, `api`, `store` (frontend).
-   - Good when responsibilities are stable and team members own specific layers.
-
-3. **Hybrid modular monolith**
-   - Keep modules by feature, but inside each feature apply layered subfolders.
-   - Best balance for medium-scale apps.
-
 ---
 
 ## 🔐 Environment Variables
