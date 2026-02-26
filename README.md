@@ -58,6 +58,7 @@
    - [Pages](#pages)
    - [Frontend Utilities](#frontend-utilities)
 
+
 8. [🧠 Function-by-Function Reference](#-function-by-function-reference)
 9. [🔐 Environment Variables](#-environment-variables)
 10. [📡 API Endpoints](#-api-endpoints)
@@ -79,8 +80,6 @@ It balances **developer experience**, **application security**, and **production
 - ✅ **Secure by default** — JWT cookie auth, CORS control, Helmet, and rate limiting.
 - ✅ **Cleanly organized codebase** — follows `Controller → Service → DAO` architecture.
 - ✅ **Deployment friendly** — environment-driven setup with health checks.
-
----
 
 
 ## ✨ Key Highlights
@@ -242,6 +241,35 @@ Shorty_url/
 
 ## 🔧 Backend Deep Dive
 
+<div align="center">
+
+
+### 🛠️ Backend at a Glance
+
+<table>
+  <tr>
+    <td align="center"><b>🧠 Architecture</b><br/>Controller → Service → DAO</td>
+    <td align="center"><b>🔒 Security</b><br/>Helmet + Rate Limit + Cookie Auth</td>
+    <td align="center"><b>⚡ Reliability</b><br/>Health Checks + Global Error Handler</td>
+  </tr>
+</table>
+
+</div>
+
+### Backend Layer Diagram
+
+
+```mermaid
+flowchart LR
+    R[Routes] --> C[Controllers]
+    C --> S[Services]
+    S --> D[DAO]
+    D --> M[(MongoDB)]
+    U[Utils] -. shared helpers .-> C
+    U -. shared helpers .-> S
+    MW[Middleware] -. guards/attach user .-> R
+```
+
 ### Entry & Global Middleware
 
 **File:** `BACKEND/app.js`
@@ -258,41 +286,19 @@ Responsibilities:
 - exposes health endpoint and redirect endpoint
 - uses centralized error handling middleware
 
-### Config Layer
+### Backend File Map (Beautiful View)
 
-| File | Why it exists |
-|---|---|
-| `src/config/config.js` | central cookie/security config values |
-| `src/config/monogo.config.js` | MongoDB connection setup |
-
-### Models Layer
-
-| File | What it models | Key behavior |
+| Layer | Files | What this layer does |
 |---|---|---|
-| `src/models/user.model.js` | user account | password hashing + compare + safe JSON response |
-| `src/models/short_url.model.js` | short URL record | long URL, short code, clicks, optional owner |
+| ⚙️ Config | `src/config/config.js`, `src/config/monogo.config.js` | Keeps cookie/runtime settings and DB bootstrap centralized. |
+| 🗃️ Models | `src/models/user.model.js`, `src/models/short_url.model.js` | Defines schema rules for users and shortened URLs. |
+| 🧱 DAO | `src/dao/user.dao.js`, `src/dao/short_url.js` | Isolates DB access and query logic from business logic. |
+| 🧠 Services | `src/services/auth.service.js`, `src/services/short_url.service.js` | Applies validation, normalization, collision checks, auth logic. |
+| 🎛️ Controllers | `src/controller/auth.controller.js`, `src/controller/short_url.controller.js`, `src/controller/user.controller.js` | Converts HTTP requests into service calls and response payloads. |
+| 🛣️ Routes | `src/routes/auth.routes.js`, `src/routes/short_url.route.js`, `src/routes/user.routes.js` | Defines API endpoints and connects them to controllers. |
+| 🧰 Utilities | `src/utils/helper.js`, `src/utils/attachUser.js`, `src/utils/errorHandler.js`, `src/utils/tryCatchWrapper.js` | Shared helpers for JWT, user attach flow, error handling and async safety. |
+| 🛡️ Middleware | `src/middleware/auth.middleware.js` | Protects private endpoints and enforces login checks. |
 
-### DAO Layer
-
-| File | Purpose |
-|---|---|
-| `src/dao/user.dao.js` | user lookup/create operations + user URL history retrieval |
-| `src/dao/short_url.js` | short URL persistence, lookup, and click increment logic |
-
-### Services Layer
-
-| File | Business logic |
-|---|---|
-| `src/services/auth.service.js` | register/login validation, duplicate checks, token creation |
-| `src/services/short_url.service.js` | slug generation, normalization, conflict handling, create flow |
-
-### Controllers Layer
-
-| File | Controller concern |
-|---|---|
-| `src/controller/auth.controller.js` | HTTP handling for register/login/logout/me + cookie set/clear |
-| `src/controller/short_url.controller.js` | create short URL + redirect behavior |
-| `src/controller/user.controller.js` | returns logged-in user's URL history |
 
 ### Routes Layer
 
@@ -302,24 +308,37 @@ Responsibilities:
 | `src/routes/short_url.route.js` | `/` (mounted at `/api/create`) |
 | `src/routes/user.routes.js` | `/urls` (mounted at `/api/user`) |
 
-### Utilities Layer
-
-| File | Utility role |
-|---|---|
-| `src/utils/helper.js` | nanoid generation + JWT sign/verify helpers |
-| `src/utils/tryCatchWrapper.js` | async controller wrapper to forward errors |
-| `src/utils/errorHandler.js` | consistent API error formatting |
-| `src/utils/attachUser.js` | optional auth attachment from cookie token |
-
-### Middleware Layer
-
-| File | Role |
-|---|---|
-| `src/middleware/auth.middleware.js` | blocks unauthenticated access to protected routes |
 
 ---
 
 ## 🎨 Frontend Deep Dive
+
+<div align="center">
+
+### ✨ Frontend at a Glance
+
+<table>
+  <tr>
+    <td align="center"><b>🧭 Routing</b><br/>TanStack Router-based pages</td>
+    <td align="center"><b>🧰 State</b><br/>Redux Toolkit + React Query</td>
+    <td align="center"><b>🔗 API</b><br/>Axios client with credentials</td>
+  </tr>
+</table>
+
+</div>
+
+### Frontend Interaction Diagram
+
+```mermaid
+flowchart LR
+    P[Pages] --> CP[Components]
+    CP --> API[API Layer]
+    API --> AX[Axios Instance]
+    AX --> BE[(Backend API)]
+    RT[Router] -. navigation .-> P
+    ST[Redux + Query] -. state/cache .-> P
+    ST -. state/cache .-> CP
+```
 
 ### Bootstrapping & Providers
 
@@ -329,59 +348,26 @@ Responsibilities:
 - mounts Redux store provider
 - mounts TanStack Router provider
 
-### Routing System
+### Frontend File Map (Beautiful View)
 
-**Folder:** `FRONTEND/src/routing/`
+| Layer | Files | Responsibility |
+|---|---|---|
+| 🧭 Routing | `src/routing/routeTree.js`, `src/routing/homepage.js`, `src/routing/auth.route.js`, `src/routing/dashboard.js`, `src/routing/history.js` | Declares route tree and page navigation behavior. |
+| 🧠 State | `src/store/store.js`, `src/store/slice/authSlice.js` | Handles auth state and global app store concerns. |
+| 🌐 API | `src/api/user.api.js`, `src/api/shortUrl.api.js`, `src/utils/axiosInstance.js` | Encapsulates server communication with credentials and normalized errors. |
+| 🧩 Components | `src/components/NavBar.jsx`, `src/components/LoginForm.jsx`, `src/components/RegisterForm.jsx`, `src/components/UrlForm.jsx`, `src/components/UserUrl.jsx` | Reusable UI units for auth, URL creation, and history rendering. |
+| 📄 Pages | `src/pages/HomePage.jsx`, `src/pages/AuthPage.jsx`, `src/pages/DashboardPage.jsx`, `src/pages/HistoryPage.jsx` | Page-level composition for complete user flows. |
+| 🎨 Utilities/Layout | `src/RootLayout.jsx`, `src/utils/helper.js`, `src/index.css` | Shared layout shell, auth guard helpers, and global styling. |
 
-| File | Purpose |
+### Components Snapshot
+
+| Component | UI Purpose |
 |---|---|
-| `routeTree.js` | builds full route tree |
-| `homepage.js` | home route config |
-| `auth.route.js` | auth route config |
-| `dashboard.js` | dashboard route config |
-| `history.js` | history route config |
+| `NavBar` | Top navigation and auth-aware actions |
+| `LoginForm` / `RegisterForm` | User authentication forms |
+| `UrlForm` | Long URL + optional custom slug input + copy short URL |
+| `UserUrl` | Authenticated user history and click metrics |
 
-### State Management
-
-| File | Purpose |
-|---|---|
-| `store/store.js` | Redux store configuration |
-| `store/slice/authSlice.js` | auth state + reducers |
-
-### API Client Layer
-
-| File | Role |
-|---|---|
-| `utils/axiosInstance.js` | shared axios client (`credentials: true` + error normalization) |
-| `api/user.api.js` | auth/user API calls |
-| `api/shortUrl.api.js` | short URL creation API call |
-
-### Components
-
-| File | Responsibility |
-|---|---|
-| `components/NavBar.jsx` | navigation + auth actions |
-| `components/LoginForm.jsx` | login input + submit flow |
-| `components/RegisterForm.jsx` | registration input + submit flow |
-| `components/UrlForm.jsx` | create URL flow + custom slug + copy behavior |
-| `components/UserUrl.jsx` | user history list + click count display |
-
-### Pages
-
-| File | Responsibility |
-|---|---|
-| `pages/HomePage.jsx` | public landing page |
-| `pages/AuthPage.jsx` | auth forms wrapper page |
-| `pages/DashboardPage.jsx` | URL creation and management page |
-| `pages/HistoryPage.jsx` | authenticated user's URL history page |
-
-### Frontend Utilities
-
-| File | Purpose |
-|---|---|
-| `RootLayout.jsx` | shared layout wrapper for routed pages |
-| `utils/helper.js` | route-level auth checks + redirects |
-| `index.css` | global styles |
 
 ---
 
@@ -486,7 +472,6 @@ CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
 
 Optional (typically provided by Render):
 
-
 ```env
 RENDER_EXTERNAL_URL=<render_generated_url>
 ```
@@ -560,11 +545,13 @@ flowchart LR
     U -->|Short URL visit| R
 ```
 
-=======
 ### Render (Backend)
 1. Deploy `BACKEND` as a web service.
 2. Configure backend environment variables.
 3. Verify `https://<your-backend-domain>/api/health` returns `status: ok`.
+
+=======
+
 
 ### Vercel (Frontend)
 1. Deploy `FRONTEND` as a Vercel project.
