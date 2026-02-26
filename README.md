@@ -37,8 +37,9 @@
 1. [🎯 Project Vision](#-project-vision)
 2. [✨ Key Highlights](#-key-highlights)
 3. [🧭 System Architecture](#-system-architecture)
-4. [📂 Repository Structure](#-repository-structure)
-5. [🔧 Backend Deep Dive](#-backend-deep-dive)
+4. [🖼️ Diagram Gallery](#diagram-gallery)
+5. [📂 Repository Structure](#-repository-structure)
+6. [🔧 Backend Deep Dive](#-backend-deep-dive)
    - [Entry & Global Middleware](#entry--global-middleware)
    - [Config Layer](#config-layer)
    - [Models Layer](#models-layer)
@@ -48,7 +49,7 @@
    - [Routes Layer](#routes-layer)
    - [Utilities Layer](#utilities-layer)
    - [Middleware Layer](#middleware-layer)
-6. [🎨 Frontend Deep Dive](#-frontend-deep-dive)
+7. [🎨 Frontend Deep Dive](#-frontend-deep-dive)
    - [Bootstrapping & Providers](#bootstrapping--providers)
    - [Routing System](#routing-system)
    - [State Management](#state-management)
@@ -56,14 +57,15 @@
    - [Components](#components)
    - [Pages](#pages)
    - [Frontend Utilities](#frontend-utilities)
-7. [🧠 Function-by-Function Reference](#-function-by-function-reference)
-8. [🔐 Environment Variables](#-environment-variables)
-9. [📡 API Endpoints](#-api-endpoints)
-10. [▶️ Run Locally](#-run-locally)
-11. [☁️ Deployment Guide](#-deployment-guide)
-12. [🧪 Troubleshooting](#-troubleshooting)
-13. [🚀 Future Improvements](#-future-improvements)
-14. [🤝 Contribution](#-contribution)
+
+8. [🧠 Function-by-Function Reference](#-function-by-function-reference)
+9. [🔐 Environment Variables](#-environment-variables)
+10. [📡 API Endpoints](#-api-endpoints)
+11. [▶️ Run Locally](#-run-locally)
+12. [☁️ Deployment Guide](#-deployment-guide)
+13. [🧪 Troubleshooting](#-troubleshooting)
+14. [🚀 Future Improvements](#-future-improvements)
+15. [🤝 Contribution](#-contribution)
 
 ---
 
@@ -79,6 +81,7 @@ It balances **developer experience**, **application security**, and **production
 - ✅ **Deployment friendly** — environment-driven setup with health checks.
 
 ---
+
 
 ## ✨ Key Highlights
 
@@ -151,6 +154,57 @@ flowchart TD
 
 ```text
 UI Action → API Route → Controller → Service → DAO → MongoDB → Response
+
+```
+
+---
+
+
+<a id="diagram-gallery"></a>
+
+## 🖼️ Diagram Gallery
+
+### 🔐 Authentication Lifecycle
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant F as Frontend
+    participant A as Auth API
+    participant D as Database
+
+    U->>F: Submit Login Form
+    F->>A: POST /api/auth/login
+    A->>D: Validate email + password
+    D-->>A: User record
+    A-->>F: Set auth cookie + user payload
+    F-->>U: Logged-in experience
+```
+
+### 🔗 URL Creation Flow
+
+```mermaid
+flowchart TD
+    A[User enters long URL + optional slug] --> B[POST /api/create]
+    B --> C{Authenticated?}
+    C -- Yes --> D[Create URL with userId]
+    C -- No --> E[Create URL without user]
+    D --> F{Custom slug exists?}
+    E --> F
+    F -- Yes --> G[Return conflict error]
+    F -- No --> H[Persist short URL]
+    H --> I[Return full short link]
+```
+
+### 📊 Redirect + Analytics Flow
+
+```mermaid
+flowchart LR
+    R[Browser hits /:id] --> Q[Lookup short code]
+    Q --> C[Increment click counter]
+    C --> O[Load original URL]
+    O --> X[HTTP Redirect to destination]
 ```
 
 ---
@@ -432,6 +486,7 @@ CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
 
 Optional (typically provided by Render):
 
+
 ```env
 RENDER_EXTERNAL_URL=<render_generated_url>
 ```
@@ -495,6 +550,17 @@ npm run dev
 
 ## ☁️ Deployment Guide
 
+### Deployment Topology
+
+```mermaid
+flowchart LR
+    V[Vercel Frontend] -->|API Calls| R[Render Backend]
+    R <--> M[(MongoDB Atlas)]
+    U[End Users] --> V
+    U -->|Short URL visit| R
+```
+
+=======
 ### Render (Backend)
 1. Deploy `BACKEND` as a web service.
 2. Configure backend environment variables.
