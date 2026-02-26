@@ -108,6 +108,7 @@ FRONTEND/
    > If `PUBLIC_BASE_URL` is not set, link generation falls back to `APP_URL`.
    > `PUBLIC_BASE_URL` and `APP_URL` can be set with or without trailing slash (both are handled safely).
    > In frontend, set `VITE_PUBLIC_BASE_URL` to the same value as backend `PUBLIC_BASE_URL` so History/Copy buttons use your short domain.
+
 3️⃣ **Setup Frontend:**
 
    ```Bash
