@@ -100,6 +100,7 @@ FRONTEND/
    APP_URL=http://localhost:5000/
    CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
    ```
+
 3️⃣ **Setup Frontend:**
 
    ```Bash
