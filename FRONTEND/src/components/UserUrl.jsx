@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllUserUrls } from '../api/user.api'
 
+const publicBaseUrl = (import.meta.env.VITE_PUBLIC_BASE_URL || import.meta.env.VITE_API_BASE_URL || "http://localhost:5000").replace(/\/+$/, "")
+
 const UserUrl = () => {
   const { data: urls, isLoading, isError, error } = useQuery({
     queryKey: ['userUrls'],
@@ -81,7 +83,7 @@ const UserUrl = () => {
                 <td className="px-6 py-4">
                   <div className="text-sm">
                     <a 
-                      href={`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/${url.short_url}`} 
+                      href={`${publicBaseUrl}/${url.short_url}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-900 hover:underline"
@@ -99,7 +101,7 @@ const UserUrl = () => {
                 </td>
                 <td className="px-6 py-4 text-sm font-medium">
                   <button
-                    onClick={() => handleCopy(`${import.meta.env.VITE_API_BASE_URL}/${url.short_url}`, url._id)}
+                    onClick={() => handleCopy(`${publicBaseUrl}/${url.short_url}`, url._id)}
                     className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md shadow-sm ${
                       copiedId === url._id
                         ? 'bg-green-600 text-white hover:bg-green-700'

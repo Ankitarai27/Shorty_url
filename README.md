@@ -107,13 +107,15 @@ FRONTEND/
    > Keep `APP_URL` as your backend server URL (Render, etc.) used by your app/API deployment.
    > If `PUBLIC_BASE_URL` is not set, link generation falls back to `APP_URL`.
    > `PUBLIC_BASE_URL` and `APP_URL` can be set with or without trailing slash (both are handled safely).
+   > In frontend, set `VITE_PUBLIC_BASE_URL` to the same value as backend `PUBLIC_BASE_URL` so History/Copy buttons use your short domain.
 
- 
 3️⃣ **Setup Frontend:**
 
    ```Bash
    cd ../FRONTEND
    npm install
+   # Optional: for history/copy links in UI
+   # VITE_PUBLIC_BASE_URL=https://sty.com
    npm run dev
    ```
 ## 🤝 Contributing
