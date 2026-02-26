@@ -103,11 +103,14 @@ FRONTEND/
 
    > For production, set `APP_URL` to your backend public URL (for example your Render URL).
    > `APP_URL` can be set with or without trailing slash (handled safely).
+
 3️⃣ **Setup Frontend:**
 
    ```Bash
    cd ../FRONTEND
    npm install
+   # Optional: for history/copy links in UI
+   # VITE_PUBLIC_BASE_URL=https://sty.com
    npm run dev
    ```
 ## 🤝 Contributing

@@ -5,6 +5,7 @@ import wrapAsync from "../utils/tryCatchWrapper.js"
 const buildPublicShortUrl = (shortUrl) => {
     const appUrl = (process.env.APP_URL || "").trim().replace(/\/+$/, "")
     return appUrl ? `${appUrl}/${shortUrl}` : `/${shortUrl}`
+
 }
 
 export const createShortUrl = wrapAsync(async (req,res)=>{
