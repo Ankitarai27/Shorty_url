@@ -87,9 +87,22 @@ FRONTEND/
    ```Bash
    cd BACKEND
    npm install
-   # 💡 Don't forget to create your .env and add MONGODB_URI & PORT
+   # 💡 Don't forget to create your `.env` (see example below)
    npm start
    ```
+
+   Example backend `.env` values:
+   ```env
+   PORT=5000
+   MONGO_URI=<your_mongodb_connection_string>
+   # MONGODB_URI is also supported as a fallback
+   JWT_SECRET=<your_jwt_secret>
+   APP_URL=http://localhost:5000/
+   CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
+   ```
+
+   > For production, set `APP_URL` to the public domain you want users to see (for example your custom short domain).
+   > If `APP_URL` points to `*.onrender.com`, generated links will also use that domain.
 3️⃣ **Setup Frontend:**
 
    ```Bash
