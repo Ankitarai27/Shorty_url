@@ -1,9 +1,11 @@
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { cookieOptions } from "../config/config.js";
 import jsonwebtoken from "jsonwebtoken"
 
-export const generateNanoId = (length) =>{
-    return nanoid(length);
+const nanoIdLowercase = customAlphabet("abcdefghijklmnopqrstuvwxyz0123456789", 7);
+
+export const generateNanoId = (length = 7) =>{
+    return nanoIdLowercase(length);
 }
 
 export const signToken = (payload) =>{

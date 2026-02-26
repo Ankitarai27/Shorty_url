@@ -15,6 +15,12 @@ import rateLimit from "express-rate-limit";
 dotenv.config();
 
 const app = express();
+app.set("trust proxy", 1);
+
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(helmet());
 
@@ -23,10 +29,18 @@ app.use(rateLimit({
   max: 100
 }));
 
-app.use(cors({
-  origin: "https://shorty-url-gray.vercel.app",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,6 +50,14 @@ app.use(attachUser);
 app.use("/api/user", user_routes);
 app.use("/api/auth", auth_routes);
 app.use("/api/create", short_url);
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    service: "shorty-backend",
+    host: req.hostname,
+  });
+});
 
 app.get("/:id", redirectFromShortUrl);
 
