@@ -8,6 +8,7 @@ const buildPublicShortUrl = (shortUrl) => {
         .replace(/\/+$/, "")
 
     return baseUrl ? `${baseUrl}/${shortUrl}` : `/${shortUrl}`
+
 }
 
 export const createShortUrl = wrapAsync(async (req,res)=>{
