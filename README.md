@@ -373,85 +373,43 @@ flowchart LR
 
 ## 🧠 Function-by-Function Reference
 
-### Backend Functions
+### Backend Functions (Grouped by Responsibility)
 
-#### `src/controller/short_url.controller.js`
-- **`buildPublicShortUrl(shortUrl)`**
-  - builds full short URL from configured app/public base URL
-  - normalizes trailing slashes before concatenation
-- **`createShortUrl(req, res)`**
-  - handles short URL creation request
-  - supports both guest and authenticated users
-- **`redirectFromShortUrl(req, res)`**
-  - reads `:id`, resolves original URL, increments click count, redirects
+| Layer | File | Key Functions | What it does |
+|---|---|---|---|
+| 🎮 Controller | `src/controller/short_url.controller.js` | `buildPublicShortUrl`, `createShortUrl`, `redirectFromShortUrl` | Receives request, builds short URL response, and handles redirect logic with click tracking. |
+| 🔐 Controller | `src/controller/auth.controller.js` | `register_user`, `login_user`, `logout_user`, `get_current_user` | Auth endpoints and session-style cookie/token responses. |
+| 👤 Controller | `src/controller/user.controller.js` | `getAllUserUrls` | Returns authenticated user URL history. |
+| 🧠 Service | `src/services/short_url.service.js` | `createShortUrlWithoutUser`, `createShortUrlWithUser` | Core URL creation business logic for guest and logged-in users. |
+| 🧠 Service | `src/services/auth.service.js` | `registerUser`, `loginUser` | Validates auth rules and delegates persistence/token creation. |
+| 🗄 DAO | `src/dao/short_url.js` | `saveShortUrl`, `getShortUrl`, `getCustomShortUrl` | DB operations for short URL read/write. |
+| 🗄 DAO | `src/dao/user.dao.js` | `findUserByEmail`, `findUserByEmailByPassword`, `findUserById`, `createUser`, `getAllUserUrlsDao` | DB operations for users and their URLs. |
+| 🧰 Utils / Middleware | `src/utils/helper.js`, `src/utils/attachUser.js`, `src/middleware/auth.middleware.js` | `generateNanoId`, `signToken`, `verifyToken`, `attachUser`, `authMiddleware` | Shared helpers and auth guards used across routes. |
 
-#### `src/services/short_url.service.js`
-- **`createShortUrlWithoutUser(url, slug?)`**
-  - guest flow for generating short URLs
-  - validates and normalizes optional custom slug
-- **`createShortUrlWithUser(url, userId, slug?)`**
-  - same flow with user ownership association
+### Frontend Functions (Grouped by Usage)
 
-#### `src/services/auth.service.js`
-- **`registerUser(name, email, password)`**
-  - duplicate email check, user creation, token generation
-- **`loginUser(email, password)`**
-  - credential validation + token generation
+| Layer | File | Key Functions / Handlers | What it does |
+|---|---|---|---|
+| 🌐 API | `src/api/shortUrl.api.js` | `createShortUrl(url, slug)` | Calls backend create URL endpoint and returns normalized result. |
+| 🌐 API | `src/api/user.api.js` | `loginUser`, `registerUser`, `logoutUser`, `getCurrentUser`, `getAllUserUrls` | Encapsulates auth and user-history API calls. |
+| 🧭 Route Guard Utility | `src/utils/helper.js` | `checkAuth({ context })` | Performs auth check through React Query and keeps Redux auth state synced. |
+| 🧩 Component handlers | `src/components/UrlForm.jsx`, `src/components/UserUrl.jsx`, `src/components/LoginForm.jsx`, `src/components/RegisterForm.jsx` | `handleSubmit`, `handleCopy`, form submit handlers | Handles user interactions like URL creation, clipboard copy, and auth form submit. |
 
-#### `src/dao/short_url.js`
-- **`saveShortUrl(shortUrl, longUrl, userId?)`**
-- **`getShortUrl(shortUrl)`**
-- **`getCustomShortUrl(slug)`**
+### 🎨 Suggested Project Structure Design Ideas
 
-#### `src/dao/user.dao.js`
-- **`findUserByEmail(email)`**
-- **`findUserByEmailByPassword(email)`**
-- **`findUserById(id)`**
-- **`createUser(name, email, password)`**
-- **`getAllUserUrlsDao(id)`**
+If you want a cleaner architecture for scaling, here are 3 practical layout options:
 
-#### `src/utils/helper.js`
-- **`generateNanoId(length = 7)`**
-- **`signToken(payload)`**
-- **`verifyToken(token)`**
+1. **Feature-first (recommended for this project)**
+   - Group by domain (`auth`, `url`, `history`) instead of technical type.
+   - Easier for teams because each feature contains API, UI, hooks, and tests in one place.
 
-#### `src/utils/attachUser.js`
-- **`attachUser(req, res, next)`**
-  - optionally decodes token and attaches `req.user`
+2. **Layered strict separation**
+   - Keep separate folders for `controllers`, `services`, `dao`, `models` (backend) and `components`, `api`, `store` (frontend).
+   - Good when responsibilities are stable and team members own specific layers.
 
-#### `src/middleware/auth.middleware.js`
-- **`authMiddleware(req, res, next)`**
-  - strict guard for authenticated-only routes
-
-#### `src/controller/auth.controller.js`
-- **`register_user`**, **`login_user`**, **`logout_user`**, **`get_current_user`**
-
-#### `src/controller/user.controller.js`
-- **`getAllUserUrls`**
-
-### Frontend Functions
-
-#### `src/api/shortUrl.api.js`
-- **`createShortUrl(url, slug)`**
-
-#### `src/api/user.api.js`
-- **`loginUser(password, email)`**
-- **`registerUser(name, password, email)`**
-- **`logoutUser()`**
-- **`getCurrentUser()`**
-- **`getAllUserUrls()`**
-
-#### `src/utils/helper.js`
-- **`checkAuth({ context })`**
-  - React Query based auth check
-  - syncs Redux state
-  - redirects unauthenticated users
-
-#### Component-local handlers
-- `UrlForm.handleSubmit`
-- `UrlForm.handleCopy`
-- `UserUrl.handleCopy`
-- submit handlers in `LoginForm` and `RegisterForm`
+3. **Hybrid modular monolith**
+   - Keep modules by feature, but inside each feature apply layered subfolders.
+   - Best balance for medium-scale apps.
 
 ---
 
