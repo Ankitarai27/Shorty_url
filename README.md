@@ -550,7 +550,7 @@ flowchart LR
 2. Configure backend environment variables.
 3. Verify `https://<your-backend-domain>/api/health` returns `status: ok`.
 
-=======
+
 
 
 ### Vercel (Frontend)
