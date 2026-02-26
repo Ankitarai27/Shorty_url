@@ -2,6 +2,14 @@ import { getShortUrl } from "../dao/short_url.js"
 import { createShortUrlWithoutUser, createShortUrlWithUser } from "../services/short_url.service.js"
 import wrapAsync from "../utils/tryCatchWrapper.js"
 
+const buildPublicShortUrl = (shortUrl) => {
+    const publicBaseUrl = (process.env.PUBLIC_BASE_URL || process.env.APP_URL || "")
+        .trim()
+        .replace(/\/+$/, "")
+
+    return publicBaseUrl ? `${publicBaseUrl}/${shortUrl}` : `/${shortUrl}`
+}
+
 export const createShortUrl = wrapAsync(async (req,res)=>{
     const data = req.body
     let shortUrl
@@ -10,7 +18,7 @@ export const createShortUrl = wrapAsync(async (req,res)=>{
     }else{  
         shortUrl = await createShortUrlWithoutUser(data.url)
     }
-    res.status(200).json({shortUrl : process.env.APP_URL + shortUrl})
+    res.status(200).json({shortUrl : buildPublicShortUrl(shortUrl)})
 })
 
 
@@ -23,6 +31,6 @@ export const redirectFromShortUrl = wrapAsync(async (req,res)=>{
 
 export const createCustomShortUrl = wrapAsync(async (req,res)=>{
     const {url,slug} = req.body
-    const shortUrl = await createShortUrlWithoutUser(url,null,slug)
-    res.status(200).json({shortUrl : process.env.APP_URL + shortUrl})
+    const shortUrl = await createShortUrlWithoutUser(url,slug)
+    res.status(200).json({shortUrl : buildPublicShortUrl(shortUrl)})
 })
