@@ -59,7 +59,7 @@
    - [Frontend Utilities](#frontend-utilities)
 
 
-8. [🧠 Function-by-Function Reference](#-function-by-function-reference)
+8. [🧠 Backend & Frontend Sequence Flows](#-backend--frontend-sequence-flows)
 9. [🔐 Environment Variables](#-environment-variables)
 10. [📡 API Endpoints](#-api-endpoints)
 11. [▶️ Run Locally](#-run-locally)
@@ -371,29 +371,73 @@ flowchart LR
 
 ---
 
-## 🧠 Function-by-Function Reference
+## 🧠 Backend & Frontend Sequence Flows
 
-### Backend Functions (Grouped by Responsibility)
+### Backend Sequence — URL Creation
 
-| Layer | File | Key Functions | What it does |
-|---|---|---|---|
-| 🎮 Controller | `src/controller/short_url.controller.js` | `buildPublicShortUrl`, `createShortUrl`, `redirectFromShortUrl` | Receives request, builds short URL response, and handles redirect logic with click tracking. |
-| 🔐 Controller | `src/controller/auth.controller.js` | `register_user`, `login_user`, `logout_user`, `get_current_user` | Auth endpoints and session-style cookie/token responses. |
-| 👤 Controller | `src/controller/user.controller.js` | `getAllUserUrls` | Returns authenticated user URL history. |
-| 🧠 Service | `src/services/short_url.service.js` | `createShortUrlWithoutUser`, `createShortUrlWithUser` | Core URL creation business logic for guest and logged-in users. |
-| 🧠 Service | `src/services/auth.service.js` | `registerUser`, `loginUser` | Validates auth rules and delegates persistence/token creation. |
-| 🗄 DAO | `src/dao/short_url.js` | `saveShortUrl`, `getShortUrl`, `getCustomShortUrl` | DB operations for short URL read/write. |
-| 🗄 DAO | `src/dao/user.dao.js` | `findUserByEmail`, `findUserByEmailByPassword`, `findUserById`, `createUser`, `getAllUserUrlsDao` | DB operations for users and their URLs. |
-| 🧰 Utils / Middleware | `src/utils/helper.js`, `src/utils/attachUser.js`, `src/middleware/auth.middleware.js` | `generateNanoId`, `signToken`, `verifyToken`, `attachUser`, `authMiddleware` | Shared helpers and auth guards used across routes. |
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Client
+    participant Routes
+    participant Controller
+    participant Service
+    participant DAO
+    participant MongoDB
 
-### Frontend Functions (Grouped by Usage)
+    Client->>Routes: POST /api/create
+    Routes->>Controller: shortUrlController.createShortUrl
+    Controller->>Service: createShortUrlWithUser() / createShortUrlWithoutUser()
+    Service->>DAO: saveShortUrl(url, shortUrl, userId)
+    DAO->>MongoDB: Insert document
+    MongoDB-->>DAO: Success
+    DAO-->>Service: Return saved document
+    Service-->>Controller: Return short URL data
+    Controller-->>Client: 201 Created
+```
 
-| Layer | File | Key Functions / Handlers | What it does |
-|---|---|---|---|
-| 🌐 API | `src/api/shortUrl.api.js` | `createShortUrl(url, slug)` | Calls backend create URL endpoint and returns normalized result. |
-| 🌐 API | `src/api/user.api.js` | `loginUser`, `registerUser`, `logoutUser`, `getCurrentUser`, `getAllUserUrls` | Encapsulates auth and user-history API calls. |
-| 🧭 Route Guard Utility | `src/utils/helper.js` | `checkAuth({ context })` | Performs auth check through React Query and keeps Redux auth state synced. |
-| 🧩 Component handlers | `src/components/UrlForm.jsx`, `src/components/UserUrl.jsx`, `src/components/LoginForm.jsx`, `src/components/RegisterForm.jsx` | `handleSubmit`, `handleCopy`, form submit handlers | Handles user interactions like URL creation, clipboard copy, and auth form submit. |
+### Backend Sequence — Redirect + Click Analytics
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Browser
+    participant Route as /:id Route
+    participant Controller
+    participant DAO
+    participant MongoDB
+
+    Browser->>Route: GET /:id
+    Route->>Controller: redirectFromShortUrl(id)
+    Controller->>DAO: getShortUrl(id)
+    DAO->>MongoDB: findOneAndUpdate({short_url:id}, {$inc:{clicks:1}})
+    MongoDB-->>DAO: URL document
+    DAO-->>Controller: original URL + updated clicks
+    Controller-->>Browser: 302 Redirect
+```
+
+### Frontend Sequence — URL Creation Interaction
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant User
+    participant UrlForm
+    participant API as shortUrl.api.js
+    participant Axios
+    participant Backend
+    participant Store as Redux/React Query
+
+    User->>UrlForm: Submit long URL + optional slug
+    UrlForm->>API: createShortUrl(url, slug)
+    API->>Axios: POST /api/create
+    Axios->>Backend: Send request with credentials
+    Backend-->>Axios: 201 + short URL response
+    Axios-->>API: Response payload
+    API-->>UrlForm: Normalize result
+    UrlForm->>Store: Update cache/state
+    UrlForm-->>User: Show and copy short URL
+```
 
 ---
 
