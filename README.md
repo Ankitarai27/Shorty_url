@@ -1,17 +1,45 @@
-# 🚀 Shorty URL — Full Project Documentation
+<div align="center">
 
-A production-ready full-stack URL shortener with authentication, custom slugs, click analytics, protected routes, and deployment support (Render + Vercel).
+# 🌈🚀 Shorty URL
+### <i>Production-Ready Full-Stack URL Shortener with Clean Architecture</i>
+
+<p>
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-22c55e?style=for-the-badge" alt="status" />
+  <img src="https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="frontend" />
+  <img src="https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="backend" />
+  <img src="https://img.shields.io/badge/Database-MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="database" />
+  <img src="https://img.shields.io/badge/Auth-JWT%20%2B%20Cookies-f59e0b?style=for-the-badge" alt="auth" />
+</p>
+
+<p>
+  <b>🔗 Smart URL Shortening</b> &nbsp;•&nbsp;
+  <b>🔐 Secure Authentication</b> &nbsp;•&nbsp;
+  <b>📊 Click Analytics</b> &nbsp;•&nbsp;
+  <b>☁️ Deploy on Render + Vercel</b>
+</p>
+
+<br/>
+
+<table>
+  <tr>
+    <td align="center"><b>⚡ Fast UX</b><br/>Quickly shorten and copy links.</td>
+    <td align="center"><b>🛡️ Secure</b><br/>Helmet + Rate Limit + Cookie auth.</td>
+    <td align="center"><b>🧱 Scalable Design</b><br/>Controller → Service → DAO layering.</td>
+  </tr>
+</table>
+
+</div>
 
 ---
 
-## 📌 Table of Contents
+## 📚 Table of Contents
 
-1. [Project Vision](#-project-vision)
-2. [What Makes This Project Unique](#-what-makes-this-project-unique)
-3. [System Architecture](#-system-architecture)
-4. [Repository Structure](#-repository-structure)
-5. [Backend Deep Dive](#-backend-deep-dive)
-   - [Entry and Global Middleware](#entry-and-global-middleware)
+1. [🎯 Project Vision](#-project-vision)
+2. [✨ Key Highlights](#-key-highlights)
+3. [🧭 System Architecture](#-system-architecture)
+4. [📂 Repository Structure](#-repository-structure)
+5. [🔧 Backend Deep Dive](#-backend-deep-dive)
+   - [Entry & Global Middleware](#entry--global-middleware)
    - [Config Layer](#config-layer)
    - [Models Layer](#models-layer)
    - [DAO Layer](#dao-layer)
@@ -20,60 +48,109 @@ A production-ready full-stack URL shortener with authentication, custom slugs, c
    - [Routes Layer](#routes-layer)
    - [Utilities Layer](#utilities-layer)
    - [Middleware Layer](#middleware-layer)
-6. [Frontend Deep Dive](#-frontend-deep-dive)
-   - [App Bootstrapping & Providers](#app-bootstrapping--providers)
+6. [🎨 Frontend Deep Dive](#-frontend-deep-dive)
+   - [Bootstrapping & Providers](#bootstrapping--providers)
    - [Routing System](#routing-system)
    - [State Management](#state-management)
    - [API Client Layer](#api-client-layer)
    - [Components](#components)
    - [Pages](#pages)
-   - [Utility Logic](#utility-logic)
-7. [Function-by-Function Reference](#-function-by-function-reference)
-8. [Environment Variables](#-environment-variables)
-9. [API Endpoints](#-api-endpoints)
-10. [Run Locally](#-run-locally)
-11. [Deployment Guide](#-deployment-guide)
-12. [Troubleshooting](#-troubleshooting)
-13. [Future Improvements](#-future-improvements)
+   - [Frontend Utilities](#frontend-utilities)
+7. [🧠 Function-by-Function Reference](#-function-by-function-reference)
+8. [🔐 Environment Variables](#-environment-variables)
+9. [📡 API Endpoints](#-api-endpoints)
+10. [▶️ Run Locally](#-run-locally)
+11. [☁️ Deployment Guide](#-deployment-guide)
+12. [🧪 Troubleshooting](#-troubleshooting)
+13. [🚀 Future Improvements](#-future-improvements)
+14. [🤝 Contribution](#-contribution)
 
 ---
 
 ## 🎯 Project Vision
 
-Shorty URL is designed to be more than a basic short-link tool:
-- easy for users (generate + copy + manage URLs)
-- secure for production (JWT + cookies + helmet + rate-limits)
-- maintainable for developers (Controller → Service → DAO architecture)
-- deployment-friendly (Render/Vercel + CORS + health checks)
+> Shorty URL is designed as a real-world URL shortener, not just a demo project.
+
+It balances **developer experience**, **application security**, and **production-readiness**:
+
+- ✅ **Simple for users** — create, copy, and manage short links quickly.
+- ✅ **Secure by default** — JWT cookie auth, CORS control, Helmet, and rate limiting.
+- ✅ **Cleanly organized codebase** — follows `Controller → Service → DAO` architecture.
+- ✅ **Deployment friendly** — environment-driven setup with health checks.
 
 ---
 
-## ✨ What Makes This Project Unique
+## ✨ Key Highlights
 
-1. **Layered backend architecture (Controller-Service-DAO):** keeps business logic clean and testable.
-2. **Auth-aware URL creation:** anonymous users can shorten links, logged-in users can save history.
-3. **Custom slug normalization:** trims and lowercases user slugs, then collision-checks.
-4. **Deployment-aware public URL generation:** prefers Render external URL fallback handling.
-5. **Integrated operational diagnostics:** `/api/health` endpoint for quick deployment/domain verification.
-6. **Modern frontend stack:** React + TanStack Router + React Query + Redux Toolkit.
+<table>
+  <tr>
+    <th>Feature</th>
+    <th>Why it matters</th>
+  </tr>
+  <tr>
+    <td>🔗 Guest + Auth URL Creation</td>
+    <td>Visitors can shorten links instantly; logged-in users get persistent history.</td>
+  </tr>
+  <tr>
+    <td>🏷️ Custom Slugs</td>
+    <td>User-defined slugs are normalized and collision-checked before saving.</td>
+  </tr>
+  <tr>
+    <td>📈 Click Tracking</td>
+    <td>Redirect flow increments click count, enabling lightweight analytics.</td>
+  </tr>
+  <tr>
+    <td>🛠️ Operational Health Endpoint</td>
+    <td><code>/api/health</code> simplifies deployment validation and uptime checks.</td>
+  </tr>
+  <tr>
+    <td>🏗️ Layered Architecture</td>
+    <td>Business logic separation makes the code easier to maintain and test.</td>
+  </tr>
+</table>
 
 ---
 
 ## 🧭 System Architecture
 
+### High-Level System Diagram
+
+```mermaid
+flowchart LR
+    UI["🎨 Frontend (React + Vite)"] -->|"Axios + Cookies"| API["⚙️ Backend API (Express)"]
+    API --> AUTH["🔐 Auth Routes"]
+    API --> CREATE["🔗 Create URL Route"]
+    API --> HISTORY["📚 User History Route"]
+    API --> REDIRECT["↪️ Redirect /:id"]
+    API <--> DB[("🍃 MongoDB")]
+
+    classDef frontend fill:#E0F2FE,stroke:#0284C7,color:#0C4A6E;
+    classDef backend fill:#DCFCE7,stroke:#16A34A,color:#14532D;
+    classDef route fill:#FEF3C7,stroke:#D97706,color:#7C2D12;
+    classDef database fill:#F3E8FF,stroke:#9333EA,color:#581C87;
+
+    class UI frontend;
+    class API backend;
+    class AUTH,CREATE,HISTORY,REDIRECT route;
+    class DB database;
+```
+
+### Internal Backend Request Flow
+
+```mermaid
+flowchart TD
+    A[HTTP Request] --> B[Route]
+    B --> C[Controller]
+    C --> D[Service]
+    D --> E[DAO]
+    E --> F[(MongoDB)]
+    F --> E --> D --> C --> G[HTTP Response]
+```
+
+### One-Line Flow Summary
+
 ```text
-Frontend (React + Vite)
-   │
-   │ HTTP (Axios, credentials)
-   ▼
-Backend API (Express)
-   ├── Auth endpoints
-   ├── URL creation endpoints
-   ├── User history endpoints
-   └── Redirect endpoint /:id
-          │
-          ▼
-MongoDB (Users + Short URLs)
+UI Action → API Route → Controller → Service → DAO → MongoDB → Response
 ```
 
 ---
@@ -111,91 +188,91 @@ Shorty_url/
 
 ## 🔧 Backend Deep Dive
 
-### Entry and Global Middleware
+### Entry & Global Middleware
 
 **File:** `BACKEND/app.js`
 
 Responsibilities:
-- initializes Express app
+- initializes Express + dotenv configuration
+- starts MongoDB connection bootstrap
 - enables `trust proxy` for hosted environments
-- sets security middleware (`helmet`, `rateLimit`)
-- configures dynamic CORS from env (`CORS_ORIGIN`)
-- parses JSON/body/cookies
-- attaches authenticated user when token is present
-- mounts all route modules
-- exposes health endpoint
-- exposes redirect endpoint
-- global error handling
-- boots DB connection and starts server
+- adds security middleware: `helmet`, `express-rate-limit`
+- configures dynamic CORS from `CORS_ORIGIN`
+- parses JSON, URL-encoded payloads, and cookies
+- attaches user from auth token if available
+- mounts all route groups
+- exposes health endpoint and redirect endpoint
+- uses centralized error handling middleware
 
 ### Config Layer
 
 | File | Why it exists |
 |---|---|
-| `src/config/config.js` | Central cookie settings (`httpOnly`, `sameSite`, `secure`, expiry). |
-| `src/config/monogo.config.js` | Mongo connection bootstrap with env fallback (`MONGO_URI` / `MONGODB_URI`). |
+| `src/config/config.js` | central cookie/security config values |
+| `src/config/monogo.config.js` | MongoDB connection setup |
 
 ### Models Layer
 
 | File | What it models | Key behavior |
 |---|---|---|
-| `src/models/user.model.js` | User account | Hashes password pre-save, compares password, hides password in JSON transform. |
-| `src/models/short_url.model.js` | Short link | Stores full URL, short code, click count, optional owner user ref. |
+| `src/models/user.model.js` | user account | password hashing + compare + safe JSON response |
+| `src/models/short_url.model.js` | short URL record | long URL, short code, clicks, optional owner |
 
 ### DAO Layer
 
 | File | Purpose |
 |---|---|
-| `src/dao/user.dao.js` | All database read/write operations for users and user URL history. |
-| `src/dao/short_url.js` | Persistence and retrieval for short link records + click increment. |
+| `src/dao/user.dao.js` | user lookup/create operations + user URL history retrieval |
+| `src/dao/short_url.js` | short URL persistence, lookup, and click increment logic |
 
 ### Services Layer
 
 | File | Business logic |
 |---|---|
-| `src/services/auth.service.js` | Register/login workflows, conflict checks, password verification, token generation. |
-| `src/services/short_url.service.js` | Random short code creation, custom slug normalization, uniqueness checks. |
+| `src/services/auth.service.js` | register/login validation, duplicate checks, token creation |
+| `src/services/short_url.service.js` | slug generation, normalization, conflict handling, create flow |
 
 ### Controllers Layer
 
 | File | Controller concern |
 |---|---|
-| `src/controller/auth.controller.js` | HTTP request/response for auth routes + cookie set/clear. |
-| `src/controller/short_url.controller.js` | Create short URL response payload + redirect by code + custom creation. |
-| `src/controller/user.controller.js` | Return logged-in user URL history. |
+| `src/controller/auth.controller.js` | HTTP handling for register/login/logout/me + cookie set/clear |
+| `src/controller/short_url.controller.js` | create short URL + redirect behavior |
+| `src/controller/user.controller.js` | returns logged-in user's URL history |
 
 ### Routes Layer
 
-| File | Endpoints registered |
+| File | Endpoints |
 |---|---|
-| `src/routes/auth.routes.js` | register/login/logout/me |
-| `src/routes/short_url.route.js` | create URL |
-| `src/routes/user.routes.js` | user URL history |
+| `src/routes/auth.routes.js` | `/register`, `/login`, `/logout`, `/me` |
+| `src/routes/short_url.route.js` | `/` (mounted at `/api/create`) |
+| `src/routes/user.routes.js` | `/urls` (mounted at `/api/user`) |
 
 ### Utilities Layer
 
 | File | Utility role |
 |---|---|
-| `src/utils/helper.js` | nanoid generation, JWT sign/verify helpers. |
-| `src/utils/tryCatchWrapper.js` | async wrapper to forward errors to middleware. |
-| `src/utils/errorHandler.js` | central error formatting for API responses. |
-| `src/utils/attachUser.js` | attach user to request if access token cookie exists. |
+| `src/utils/helper.js` | nanoid generation + JWT sign/verify helpers |
+| `src/utils/tryCatchWrapper.js` | async controller wrapper to forward errors |
+| `src/utils/errorHandler.js` | consistent API error formatting |
+| `src/utils/attachUser.js` | optional auth attachment from cookie token |
 
 ### Middleware Layer
 
 | File | Role |
 |---|---|
-| `src/middleware/auth.middleware.js` | strict route guard for authenticated-only endpoints. |
+| `src/middleware/auth.middleware.js` | blocks unauthenticated access to protected routes |
 
 ---
 
 ## 🎨 Frontend Deep Dive
 
-### App Bootstrapping & Providers
+### Bootstrapping & Providers
 
 **File:** `FRONTEND/src/main.jsx`
+
 - creates React Query client
-- initializes Redux store provider
+- mounts Redux store provider
 - mounts TanStack Router provider
 
 ### Routing System
@@ -204,95 +281,87 @@ Responsibilities:
 
 | File | Purpose |
 |---|---|
-| `routeTree.js` | defines root route and composed route tree |
-| `homepage.js` | route config for home page |
-| `auth.route.js` | route config for auth page |
-| `dashboard.js` | route config for dashboard |
-| `history.js` | route config for history |
+| `routeTree.js` | builds full route tree |
+| `homepage.js` | home route config |
+| `auth.route.js` | auth route config |
+| `dashboard.js` | dashboard route config |
+| `history.js` | history route config |
 
 ### State Management
 
 | File | Purpose |
 |---|---|
 | `store/store.js` | Redux store configuration |
-| `store/slice/authSlice.js` | auth state, login/logout actions |
+| `store/slice/authSlice.js` | auth state + reducers |
 
 ### API Client Layer
 
 | File | Role |
 |---|---|
-| `utils/axiosInstance.js` | central axios instance, base URL, credentials, response error normalization |
-| `api/user.api.js` | auth/user related API calls |
-| `api/shortUrl.api.js` | create short URL API call |
+| `utils/axiosInstance.js` | shared axios client (`credentials: true` + error normalization) |
+| `api/user.api.js` | auth/user API calls |
+| `api/shortUrl.api.js` | short URL creation API call |
 
 ### Components
 
-| File | Component responsibility |
+| File | Responsibility |
 |---|---|
-| `components/NavBar.jsx` | top navigation + auth-aware actions |
-| `components/LoginForm.jsx` | login form and submit behavior |
-| `components/RegisterForm.jsx` | registration form and submit behavior |
-| `components/UrlForm.jsx` | create URL form, custom slug input, copy result |
-| `components/UserUrl.jsx` | history table, click count display, open/copy actions |
+| `components/NavBar.jsx` | navigation + auth actions |
+| `components/LoginForm.jsx` | login input + submit flow |
+| `components/RegisterForm.jsx` | registration input + submit flow |
+| `components/UrlForm.jsx` | create URL flow + custom slug + copy behavior |
+| `components/UserUrl.jsx` | user history list + click count display |
 
 ### Pages
 
-| File | Page-level composition |
+| File | Responsibility |
 |---|---|
-| `pages/HomePage.jsx` | public landing/home experience |
-| `pages/AuthPage.jsx` | container for auth forms |
-| `pages/DashboardPage.jsx` | main shortener workflow page |
-| `pages/HistoryPage.jsx` | user’s created URLs and analytics |
+| `pages/HomePage.jsx` | public landing page |
+| `pages/AuthPage.jsx` | auth forms wrapper page |
+| `pages/DashboardPage.jsx` | URL creation and management page |
+| `pages/HistoryPage.jsx` | authenticated user's URL history page |
 
-### Utility Logic
+### Frontend Utilities
 
 | File | Purpose |
 |---|---|
-| `RootLayout.jsx` | shared layout shell for routed pages |
-| `utils/helper.js` | route-level auth check helper (redirect unauthenticated users) |
+| `RootLayout.jsx` | shared layout wrapper for routed pages |
+| `utils/helper.js` | route-level auth checks + redirects |
 | `index.css` | global styles |
 
 ---
 
 ## 🧠 Function-by-Function Reference
 
-### Backend functions
+### Backend Functions
 
 #### `src/controller/short_url.controller.js`
 - **`buildPublicShortUrl(shortUrl)`**
-  - Builds full short link from env base URL.
-  - Trims trailing slash to avoid malformed links.
+  - builds full short URL from configured app/public base URL
+  - normalizes trailing slashes before concatenation
 - **`createShortUrl(req, res)`**
-  - Determines whether user is logged in.
-  - Uses appropriate service to generate slug.
-  - Returns full short URL.
+  - handles short URL creation request
+  - supports both guest and authenticated users
 - **`redirectFromShortUrl(req, res)`**
-  - Reads `:id` param, loads URL, increments click count through DAO, redirects to original URL.
-- **`createCustomShortUrl(req, res)`**
-  - Accepts slug in request and returns full custom short URL.
+  - reads `:id`, resolves original URL, increments click count, redirects
 
 #### `src/services/short_url.service.js`
 - **`createShortUrlWithoutUser(url, slug?)`**
-  - For anonymous flow.
-  - Normalizes optional slug (`trim + lowercase`).
-  - Checks custom slug collision.
-  - Persists URL.
+  - guest flow for generating short URLs
+  - validates and normalizes optional custom slug
 - **`createShortUrlWithUser(url, userId, slug?)`**
-  - Same as above but associates URL with a user.
+  - same flow with user ownership association
 
 #### `src/services/auth.service.js`
 - **`registerUser(name, email, password)`**
-  - Prevents duplicate email, creates user, signs JWT.
+  - duplicate email check, user creation, token generation
 - **`loginUser(email, password)`**
-  - Validates user and password, signs JWT.
+  - credential validation + token generation
 
 #### `src/dao/short_url.js`
 - **`saveShortUrl(shortUrl, longUrl, userId?)`**
-  - Writes short URL record; throws conflict for duplicates.
 - **`getShortUrl(shortUrl)`**
-  - Finds by short code and increments clicks atomically.
 - **`getCustomShortUrl(slug)`**
-  - Checks if custom slug exists.
 
 #### `src/dao/user.dao.js`
 - **`findUserByEmail(email)`**
@@ -301,35 +370,29 @@ Responsibilities:
 - **`createUser(name, email, password)`**
 - **`getAllUserUrlsDao(id)`**
 
-All 5 functions isolate DB operations away from service/controller logic.
-
 #### `src/utils/helper.js`
-- **`generateNanoId(length = 7)`**: lowercase short code generator
-- **`signToken(payload)`**: creates JWT
-- **`verifyToken(token)`**: verifies token and returns user ID
+- **`generateNanoId(length = 7)`**
+- **`signToken(payload)`**
+- **`verifyToken(token)`**
 
 #### `src/utils/attachUser.js`
 - **`attachUser(req, res, next)`**
-  - Reads cookie token, verifies user, attaches `req.user` if valid.
+  - optionally decodes token and attaches `req.user`
 
 #### `src/middleware/auth.middleware.js`
 - **`authMiddleware(req, res, next)`**
-  - Hard-blocks access when user is not authenticated.
+  - strict guard for authenticated-only routes
 
 #### `src/controller/auth.controller.js`
-- **`register_user`**: handles register endpoint + sets cookie
-- **`login_user`**: handles login endpoint + sets cookie
-- **`logout_user`**: clears auth cookie
-- **`get_current_user`**: returns current user from request context
+- **`register_user`**, **`login_user`**, **`logout_user`**, **`get_current_user`**
 
 #### `src/controller/user.controller.js`
-- **`getAllUserUrls`**: returns all URLs owned by authenticated user
+- **`getAllUserUrls`**
 
-### Frontend functions
+### Frontend Functions
 
 #### `src/api/shortUrl.api.js`
 - **`createShortUrl(url, slug)`**
-  - Calls backend create endpoint and returns generated short URL string.
 
 #### `src/api/user.api.js`
 - **`loginUser(password, email)`**
@@ -338,20 +401,17 @@ All 5 functions isolate DB operations away from service/controller logic.
 - **`getCurrentUser()`**
 - **`getAllUserUrls()`**
 
-These map 1:1 with backend auth/user endpoints.
-
 #### `src/utils/helper.js`
 - **`checkAuth({ context })`**
-  - Route guard helper.
-  - Fetches current user via React Query.
-  - Syncs Redux state and redirects to auth when unauthenticated.
+  - React Query based auth check
+  - syncs Redux state
+  - redirects unauthenticated users
 
-#### Component-local functions worth knowing
-- `UrlForm.handleSubmit` / `UrlForm.handleCopy`
+#### Component-local handlers
+- `UrlForm.handleSubmit`
+- `UrlForm.handleCopy`
 - `UserUrl.handleCopy`
-- `LoginForm` and `RegisterForm` submit handlers
-
-These orchestrate user UI flows and call API layer methods.
+- submit handlers in `LoginForm` and `RegisterForm`
 
 ---
 
@@ -362,7 +422,7 @@ These orchestrate user UI flows and call API layer methods.
 ```env
 PORT=5000
 MONGO_URI=<mongo_connection_string>
-# fallback if needed:
+# optional fallback
 MONGODB_URI=<mongo_connection_string>
 
 JWT_SECRET=<jwt_secret>
@@ -370,10 +430,13 @@ APP_URL=http://localhost:5000/
 CORS_ORIGIN=http://localhost:5173,https://your-frontend.vercel.app
 ```
 
-Optional (Render-injected commonly):
-- `RENDER_EXTERNAL_URL`
+Optional (typically provided by Render):
 
-### Frontend (Vercel or local `.env`)
+```env
+RENDER_EXTERNAL_URL=<render_generated_url>
+```
+
+### Frontend (`FRONTEND/.env`)
 
 ```env
 VITE_API_BASE_URL=http://localhost:5000
@@ -386,31 +449,45 @@ VITE_API_BASE_URL=http://localhost:5000
 | Method | Path | Description |
 |---|---|---|
 | GET | `/api/health` | service health check |
-| POST | `/api/auth/register` | register user |
+| POST | `/api/auth/register` | register a new user |
 | POST | `/api/auth/login` | login user |
-| POST | `/api/auth/logout` | logout user |
-| GET | `/api/auth/me` | current user |
+| GET | `/api/auth/logout` | logout current user |
+| GET | `/api/auth/me` | get current authenticated user |
 | POST | `/api/create` | create short URL |
-| POST | `/api/user/urls` | user URL history |
-| GET | `/:id` | redirect by short code |
+| POST | `/api/user/urls` | fetch all URLs for authenticated user |
+| GET | `/:id` | redirect from short code to original URL |
 
 ---
 
 ## ▶️ Run Locally
 
-### Backend
+### 1) Clone repository
+```bash
+git clone <your-repo-url>
+cd Shorty_url
+```
 
+### 2) Install backend dependencies
 ```bash
 cd BACKEND
 npm install
+```
+
+### 3) Install frontend dependencies
+```bash
+cd ../FRONTEND
+npm install
+```
+
+### 4) Start backend server
+```bash
+cd ../BACKEND
 npm start
 ```
 
-### Frontend
-
+### 5) Start frontend development server
 ```bash
-cd FRONTEND
-npm install
+cd ../FRONTEND
 npm run dev
 ```
 
@@ -418,60 +495,61 @@ npm run dev
 
 ## ☁️ Deployment Guide
 
-### Render (backend)
-1. Deploy `BACKEND`
-2. Add env variables
-3. Confirm `https://<backend>/api/health` returns status ok
+### Render (Backend)
+1. Deploy `BACKEND` as a web service.
+2. Configure backend environment variables.
+3. Verify `https://<your-backend-domain>/api/health` returns `status: ok`.
 
-### Vercel (frontend)
-1. Deploy `FRONTEND`
-2. Add `VITE_API_BASE_URL`
-3. Redeploy and verify API connectivity
+### Vercel (Frontend)
+1. Deploy `FRONTEND` as a Vercel project.
+2. Set `VITE_API_BASE_URL` to your deployed backend URL.
+3. Redeploy and validate full auth + URL creation flow.
 
 ---
 
 ## 🧪 Troubleshooting
 
-### 1) CORS blocked in browser
-- ensure frontend domain exists in `CORS_ORIGIN` list
-- keep list comma-separated, no trailing spaces
+### 1) CORS error in browser
+- ensure frontend domain is included in `CORS_ORIGIN`
+- keep origins comma-separated and trimmed
 
-### 2) 404 for short URL
-- verify redirect endpoint is reachable on backend
-- check DB contains matching `short_url`
-- verify copied short code casing (project uses lowercase generation)
+### 2) Short link redirect gives 404
+- verify short code exists in database
+- verify backend redirect route `/:id` is reachable
+- use lowercase short code (system generates lowercase IDs)
 
-### 3) Invalid SSL / private connection warning
-- verify custom domain SSL status on host
-- wait for DNS + certificate propagation
+### 3) Login/session not persisting
+- verify cookie + credentials config
+- verify HTTPS and proper domains in production
 
-### 4) Wrong base URL in generated links
+### 4) Wrong base URL in generated short links
 - verify `APP_URL`
-- check if `RENDER_EXTERNAL_URL` overrides in hosted env
-
-### 5) Login/session not persisting
-- verify cookie settings + HTTPS in production
-- ensure frontend and backend domains are correctly set for credentials requests
+- verify `RENDER_EXTERNAL_URL` behavior in deployed environment
 
 ---
 
 ## 🚀 Future Improvements
 
-- Add automated unit/integration tests
+- Add automated unit/integration testing
 - Add QR code generation for each short URL
-- Add expiration time per short URL
-- Add link analytics dashboard (charts, referrers)
-- Add role-based admin panel
-
+- Add expiration policies for short URLs
+- Add richer analytics dashboard (referrer/source/time charts)
+- Add team/shared workspaces and role permissions
 
 ---
 
 ## 🤝 Contribution
 
-1. Fork repo
-2. Create feature branch
-3. Commit changes
-4. Open PR
+1. Fork this repository
+2. Create your feature branch
+3. Commit your changes
+4. Open a pull request
 
 ---
-Developed with ❤️ by **Ankita Rai**
+
+<div align="center">
+
+### 💙 Built with clean architecture, secure practices, and beautiful simplicity.
+If this project helps you, please consider giving it a ⭐
+
+</div>
